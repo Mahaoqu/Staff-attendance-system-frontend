@@ -6,7 +6,11 @@ Vue.use(Router);
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes: [
+  routes: [{
+      path: '/404',
+      component: () => import('@/views/404'),
+      hidden: true
+    },
     {
       path: '/',
       name: 'dashbroad',
@@ -16,6 +20,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: () => import('./views/Login.vue'),
+    },
+    {
+      path: '*',
+      redirect: '/404',
+      hidden: true
     }
   ],
 });
