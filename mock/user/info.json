@@ -1,0 +1,9 @@
+{
+    "status":20000,
+    "data":{
+        "id" : 1,
+        "name":"小木",
+        "email" : "mjming@mail.com",
+        "next_work" : "2019-4-15 08:00"
+    }
+}

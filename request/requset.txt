@@ -1,0 +1,8 @@
+/auth/login 
+POST
+id=1
+password=123456
+
+/auth/logout
+POST
+
