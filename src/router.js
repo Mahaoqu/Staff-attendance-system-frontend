@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Dashbroad from './views/Dashbroad.vue';
-import Login from './views/Login.vue';
 
 Vue.use(Router);
 
@@ -12,17 +10,12 @@ export default new Router({
     {
       path: '/',
       name: 'dashbroad',
-      component: Dashbroad,
+      component: () => import('./views/Dashbroad.vue'),
     },
     {
       path: '/login',
-      name: 'home',
-      component: Login,
-    },
-    {
-      path: '*',
-      name: '404',
-      component: Home,
-    },
+      name: 'login',
+      component: () => import('./views/Login.vue'),
+    }
   ],
 });

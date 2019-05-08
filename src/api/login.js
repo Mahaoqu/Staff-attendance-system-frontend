@@ -1,10 +1,13 @@
-import request from '@/api/req'
+import request from '@/utils/request'
 
-export function login(data) {
+export function login(id, password) {
   return request({
     url: '/auth/login',
     method: 'post',
-    data
+    data : {
+      id,
+      password
+    }
   })
 }
 
