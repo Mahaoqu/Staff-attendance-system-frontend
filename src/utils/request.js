@@ -8,7 +8,7 @@ const service = axios.create({
 service.interceptors.response.use(
   response => {
     const res = response.data
-    if (res.status !== 20000) {
+    if (response.status != 200 || res.status !== 20000) {
       Message({
         message: res.message,
         type: 'error',
