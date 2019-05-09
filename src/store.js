@@ -1,14 +1,17 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import {login} from '@/api/login'
+import {
+  login,
+  logout
+} from '@/api/login'
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     id: "",
-    name: ""
+    name: "",
   },
   mutations: {
     SET_ID: (state, id) => {
@@ -19,10 +22,13 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    Login({ commit }, form) {
+    Login({
+      commit
+    }, form) {
       return new Promise((resolve, reject) => {
         login(form.id, form.password)
           .then(res => {
+            sessionStorage.setItem('isLogin', true)
             resolve()
           })
           .catch(error => {
@@ -33,8 +39,20 @@ export default new Vuex.Store({
     GetInfo() {
 
     },
-    LogOut() {
-
-    }
+    LogOut({
+      commit,
+      state
+    }) {
+      return new Promise((resolve, reject) => {
+        logout(state.token).then(() => {
+          sessionStorage.removeItem('isLogin')
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
   },
 });
+
+export default store;
