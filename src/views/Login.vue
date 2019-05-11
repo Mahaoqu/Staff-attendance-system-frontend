@@ -5,9 +5,9 @@
       <el-form ref="form" :model="form" label-width="80px" class="login-form">
         <el-form-item
           prop="id"
-          label="ID"
+          label="工号"
           :rules="[
-            { required: true, message: '请输入您的ID', trigger: 'blur' },
+            { required: true, message: '请输入您的工号', trigger: 'blur' },
           ]"
         >
           <el-input v-model="form.id" placeholder="80000"></el-input>

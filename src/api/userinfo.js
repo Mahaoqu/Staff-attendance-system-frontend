@@ -7,6 +7,16 @@ export function getUserInfo() {
   })
 }
 
+export function patchUserInfo(info) {
+  return request({
+    url: '/userinfo',
+    method: 'patch',
+    data: {
+      "data":info
+    }
+  })
+}
+
 export function getRole() {
   return request({
     url: '/role',
