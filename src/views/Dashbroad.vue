@@ -20,8 +20,14 @@ export default {
   data() {
     return {};
   },
-  created() {},
-  methods: {}
+  created() {
+    this.getInfo();
+  },
+  methods: {
+    async getInfo() {
+      await this.$store.dispatch("GetInfo");
+    }
+  }
 };
 </script>
 

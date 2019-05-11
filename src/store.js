@@ -6,6 +6,9 @@ import {
   logout
 } from '@/api/login'
 
+import {
+  getUserInfo
+} from "@/api/userinfo";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -17,11 +20,8 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    SET_ID: (state, id) => {
-      state.id = id
-    },
-    SET_NAME: (state, name) => {
-      state.name = name
+    SET_USER_INFO: (state, info) => {
+      state.user_info = info
     }
   },
   actions: {
@@ -32,8 +32,11 @@ const store = new Vuex.Store({
       sessionStorage.setItem('isLogin', true)
       return loginData
     },
-    GetInfo() {
-
+    async GetInfo({
+      commit
+    }) {
+      const info = await getUserInfo()
+      commit('SET_USER_INFO', info)
     },
     async LogOut({
       commit,
