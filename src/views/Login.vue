@@ -52,17 +52,14 @@ export default {
     }
   },
   methods: {
-    onLogin() {
+    async onLogin() {
       this.loading = true;
-      this.$store
-        .dispatch("Login", this.form) // 见 @/store.js 的 action
-        .then(() => {
-          this.loading = false;
-          this.$router.push({ path: this.redirect || "/" });
-        })
-        .catch(() => {
-          this.loading = false;
-        });
+      try {
+        await this.$store.dispatch("Login", this.form); // 见 @/store.js 的 action
+        this.$router.push({ path: this.redirect || "/" });
+      } finally {
+        this.loading = false;
+      }
     }
   }
 };

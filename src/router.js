@@ -14,13 +14,21 @@ const router = new Router({
     },
     {
       path: '/',
-      name: 'dashbroad',
-      component: () => import('./views/Dashbroad.vue'),
+      component: () => import('@/views/Dashbroad'),
+      children: [{
+          path: "",
+          component: () => import('@/views/Default')
+        },
+        {
+          path: '/profile',
+          component: () => import('@/views/Profile')
+        }
+      ]
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('./views/Login.vue'),
+      component: () => import('./views/Login'),
     },
     {
       path: '*',

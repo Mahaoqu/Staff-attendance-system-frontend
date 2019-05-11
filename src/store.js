@@ -10,8 +10,11 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    id: "",
-    name: "",
+    user_info: {
+      id: "",
+      name: "",
+      role: "",
+    }
   },
   mutations: {
     SET_ID: (state, id) => {
@@ -22,36 +25,24 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    Login({
+    async Login({
       commit
     }, form) {
-      return new Promise((resolve, reject) => {
-        login(form.id, form.password)
-          .then(res => {
-            sessionStorage.setItem('isLogin', true)
-            resolve()
-          })
-          .catch(error => {
-            reject(error)
-          })
-      })
+      const loginData = await login(form.id, form.password)
+      sessionStorage.setItem('isLogin', true)
+      return loginData
     },
     GetInfo() {
 
     },
-    LogOut({
+    async LogOut({
       commit,
       state
     }) {
-      return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          sessionStorage.removeItem('isLogin')
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
+      const logoutData = await logout(state.token)
+      sessionStorage.removeItem('isLogin')
+      return logoutData
+    }
   },
 });
 
