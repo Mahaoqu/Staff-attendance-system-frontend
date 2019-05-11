@@ -53,16 +53,19 @@ router.beforeEach((to, from, next) => {
       next({
         path: '/'
       })
-    } else {
+    } else if (to.meta.role === undefined || to.meta.role.indexOf(to.path) !== -1) {
       next()
+    } else {
+      next({
+        path: "404"
+      })
     }
+  } else if (whiteList.indexOf(to.path) !== -1) { // 如果存在于白名单中，继续
+    next()
   } else {
-    if (whiteList.indexOf(to.path) !== -1) { // 如果存在于白名单中，继续
-      next()
-    } else {
-      next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
-    }
+    next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
   }
+
 })
 
 export default router;
