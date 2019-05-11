@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sas-navbar">
     <el-menu :default-active="activeIndex" mode="horizontal" :router="true">
       <el-menu-item index="/">首页</el-menu-item>
       <template v-if="isManager">
@@ -7,7 +7,7 @@
       </template>
       <template v-if="isStaff">
         <el-menu-item v-for="i in staff" :key="i.route" :index="i.route">{{i.name}}</el-menu-item>
-        <el-submenu>
+        <el-submenu index="/apply">
           <template slot="title">申请</template>
           <el-menu-item v-for="i in staff2" :key="i.route" :index="i.route">{{i.name}}</el-menu-item>
         </el-submenu>
@@ -57,32 +57,26 @@ export default {
   },
   computed: {
     isManager() {
-      return this.$store.state.user_info.role === "manager";
+      return this.$store.state.role === "manager";
     },
     isStaff() {
       return (
-        this.$store.state.user_info.role === "staff" ||
-        this.$store.state.user_info.role === "charge"
+        this.$store.state.role === "staff" ||
+        this.$store.state.role === "charge"
       );
     },
     isCharge() {
-      return this.$store.state.user_info.role === "charge";
+      return this.$store.state.role === "charge";
     }
   },
   methods: {
     async logout() {
       await this.$store.dispatch("LogOut");
       location.reload(); // 重新实例化vue-router对象
-    },
-    goProfile() {
-      this.$router.push({ path: "/profile" });
     }
   }
 };
 </script>
 
 <style>
-.user-submenu {
-  margin-right: auto;
-}
 </style>

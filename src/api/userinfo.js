@@ -6,3 +6,10 @@ export function getUserInfo() {
     method: 'get'
   })
 }
+
+export function getRole() {
+  return request({
+    url: '/role',
+    method: 'get'
+  })
+}

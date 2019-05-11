@@ -22,7 +22,7 @@
           <el-input v-model="form.password" placeholder="******" :type="password_type"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onLogin" :loading="loading">登录</el-button>
+          <el-button type="primary" @click.prevent="onLogin" :loading="loading">登录</el-button>
         </el-form-item>
       </el-form>
     </el-main>

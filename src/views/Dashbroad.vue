@@ -17,12 +17,10 @@ export default {
     return {};
   },
   created() {
-    this.getInfo();
+    this.$store.dispatch("GetRole");
   },
   methods: {
-    async getInfo() {
-      await this.$store.dispatch("GetInfo");
-    }
+    
   }
 };
 </script>

@@ -7,21 +7,17 @@ import {
 } from '@/api/login'
 
 import {
-  getUserInfo
+  getRole
 } from "@/api/userinfo";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    user_info: {
-      id: "",
-      name: "",
-      role: "",
-    }
+    role : ""
   },
   mutations: {
-    SET_USER_INFO: (state, info) => {
-      state.user_info = info
+    SET_ROLE: (state, role) => {
+      state.role = role
     }
   },
   actions: {
@@ -32,11 +28,11 @@ const store = new Vuex.Store({
       sessionStorage.setItem('isLogin', true)
       return loginData
     },
-    async GetInfo({
+    async GetRole({
       commit
     }) {
-      const info = await getUserInfo()
-      commit('SET_USER_INFO', info)
+      const role = await getRole()
+      commit('SET_ROLE', role.role)
     },
     async LogOut({
       commit,
