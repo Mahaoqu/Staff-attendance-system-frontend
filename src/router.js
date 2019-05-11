@@ -20,8 +20,15 @@ const router = new Router({
           component: () => import('@/views/Default')
         },
         {
-          path: '/profile',
+          path: 'profile',
           component: () => import('@/views/Profile')
+        },
+        {
+          path: 'staffs',
+          component: () => import('@/views/Manager/Staffs'),
+          meta: {
+            role: ['manager']
+          }
         }
       ]
     },
