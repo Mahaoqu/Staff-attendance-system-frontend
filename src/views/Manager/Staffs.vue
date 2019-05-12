@@ -25,17 +25,29 @@
       >导入Excel</el-button>
     </div>
 
-    <el-table :data="staffData" style="width: 100%">
+    <el-table :data="staffData" style="width: 100%" v-loading="listLoading">
       <el-table-column prop="id" label="工号" width="180"></el-table-column>
       <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-      <el-table-column prop="birthday" label="生日">
+      <el-table-column label="年龄">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ age(scope.row.birthday) }}岁</span>
         </template>
       </el-table-column>
-      <el-table-column prop="gender" label="性别"></el-table-column>
-      <el-table-column prop="departmentId" label="所属部门"></el-table-column>
-      <el-table-column prop="role" label="职位"></el-table-column>
+      <el-table-column label="性别">
+        <template slot-scope="scope">
+          <span>{{ scope.row.gender === 'male' ? '男' : '女' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="所属部门">
+        <template slot-scope="scope">
+          <span>{{ departmentName[scope.row.departmentId ] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="role" label="职位">
+        <template slot-scope="scope">
+          <span>{{ roleName[scope.row.role] }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -47,26 +59,43 @@
 </template>
 
 <script>
-import { getStaffs } from "@/api/manager";
+import { getStaffs, getDepartments } from "@/api/manager";
+
 export default {
-  created() {
-    this.getStaffData();
+  async created() {
+    let data = await Promise.all(getDepartments(), this.getStaffData());
+    data.departments.forEach(x => {
+      this.departmentName[x.id] = x.name;
+    });
   },
   data() {
     return {
       listLoading: true,
       staffData: [],
+      departmentName: {},
       downloadLoading: false,
-      uploadLoading: false
+      uploadLoading: false,
+      roleName: {
+        charge: "主管",
+        staff: "员工"
+      }
     };
   },
   methods: {
+    age(time) {
+      return Math.floor(
+        (Date.now() - Date.parse(time)) / (365 * 24 * 60 * 60 * 1000)
+      );
+    },
     async getStaffData() {
       const data = await getStaffs();
       this.staffData = data.staffs;
+      this.listLoading = false;
     },
 
-    handleEdit(index, row) {},
+    handleEdit(index, row) {
+      console.log(index, row);
+    },
     handleDelete(index, row) {},
     handleFilter() {},
     handleCreate() {},

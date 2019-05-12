@@ -6,3 +6,10 @@ export function getStaffs() {
     method: 'get'
   })
 }
+
+export function getDepartments() {
+  return request({
+    url: '/departments',
+    method: 'get'
+  })
+}
