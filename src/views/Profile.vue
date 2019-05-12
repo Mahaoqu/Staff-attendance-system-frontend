@@ -31,7 +31,7 @@
     </el-form-item>
     <el-form-item v-show="revise">
       <el-button type="success" @click="patchForm" :loading="onSubmit" class="sub-button">确认更改</el-button>
-      <el-button type @click="resetForm" class="sub-button">重置</el-button>
+      <el-button type @click="resetForm" class="sub-button">取消</el-button>
     </el-form-item>
     <el-form-item v-show="!revise">
       <el-button type="info" @click="revise=true" class="change-button">更改个人信息</el-button>
@@ -103,6 +103,7 @@ export default {
     },
     resetForm() {
       this.info = { ...originInfo };
+      this.revise = false;
     }
   }
 };

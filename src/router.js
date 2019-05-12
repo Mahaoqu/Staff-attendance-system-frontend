@@ -48,25 +48,55 @@ const router = new Router({
 
 const whiteList = ['/login'] // 不重定向白名单
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  
+  // 先判断是否已经登录
   if (sessionStorage.getItem('isLogin')) {
+
+    // 如果登录，需要查看是否已经保存了role
+    // 这个状态本来应该在DashBroad初始化后获取，但Vuex中的内容刷新后会消失
+    if (store.state.role === "" || store.state.role === undefined) {
+      await store.dispatch("GetRole")
+      next()
+    }
+
+    // 如果前往登录页则转移到主页
     if (to.path === '/login') {
       next({
         path: '/'
       })
+
+      // 404重定向，刷新后可以直接转到所在页面
+    } else if (to.path === '/404') {
+      const toPath = to.query.redirect;
+      if (toPath === undefined) {
+        next()
+      } else {
+        next({
+          path: toPath
+        })
+      }
+
+
+      // 权限检查，在路由表的meta成员的role属性中
     } else if (to.meta.role === undefined || to.meta.role.indexOf(store.state.role) !== -1) {
       next()
+
+      // 没有找到的页面定位到404页
     } else {
       next({
         path: `404?redirect=${to.path}`
       })
     }
-  } else if (whiteList.indexOf(to.path) !== -1) { // 如果存在于白名单中，继续
-    next()
-  } else {
-    next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
-  }
 
+    // 如果存在于白名单中，继续
+  } else if (whiteList.indexOf(to.path) !== -1) {
+    next()
+
+    // 否则全部重定向到登录页
+  } else {
+    next(`/login?redirect=${to.path}`)
+  }
 })
 
 export default router;
