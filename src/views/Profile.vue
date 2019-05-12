@@ -29,9 +29,12 @@
     <el-form-item label="下班提醒" prop="notification">
       <el-switch v-model="info.notification"></el-switch>
     </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="patchForm">更改</el-button>
-      <el-button type @click="resetForm">重置</el-button>
+    <el-form-item v-show="revise">
+      <el-button type="success" @click="patchForm" :loading="onSubmit" class="sub-button">确认更改</el-button>
+      <el-button type @click="resetForm" class="sub-button">重置</el-button>
+    </el-form-item>
+    <el-form-item v-show="!revise">
+      <el-button type="info" @click="revise=true" class="change-button">更改个人信息</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -58,6 +61,8 @@ let originInfo = {};
 export default {
   data() {
     return {
+      revise: false,
+      onSubmit: false,
       info: {},
       options: [
         { value: "manager", label: "经理" },
@@ -78,6 +83,7 @@ export default {
       let changed = !compare(this.info, originInfo);
       try {
         if (changed) {
+          this.onSubmit = true;
           await patchUserInfo(this.info);
         }
         this.$notify({
@@ -92,6 +98,8 @@ export default {
         });
       }
       this.getForm(); // 更新后重新获取信息
+      this.onSubmit = false;
+      this.revise = false;
     },
     resetForm() {
       this.info = { ...originInfo };
@@ -105,5 +113,11 @@ export default {
   width: 600px;
   margin-left: 100px;
   margin-top: 50px;
+}
+.change-button {
+  width: 480px;
+}
+.sub-button {
+  width: 230px;
 }
 </style>
