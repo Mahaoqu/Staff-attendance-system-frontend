@@ -24,10 +24,10 @@
       <el-date-picker v-model="info.birthday" type="date" :disabled="true"></el-date-picker>
     </el-form-item>
     <el-form-item label="email">
-      <el-input v-model="info.email"></el-input>
+      <el-input v-model="info.email" :disabled="!revise"></el-input>
     </el-form-item>
     <el-form-item label="下班提醒" prop="notification">
-      <el-switch v-model="info.notification"></el-switch>
+      <el-switch v-model="info.notification" :disabled="!revise"></el-switch>
     </el-form-item>
     <el-form-item v-show="revise">
       <el-button type="success" @click="patchForm" :loading="onSubmit" class="sub-button">确认更改</el-button>

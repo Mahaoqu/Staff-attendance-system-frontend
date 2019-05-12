@@ -31,8 +31,9 @@ const store = new Vuex.Store({
     async GetRole({
       commit
     }) {
-      const role = await getRole()
-      commit('SET_ROLE', role.role)
+      const data = await getRole()
+      console.log(data.role)
+      commit('SET_ROLE', data.role)
     },
     async LogOut({
       commit,

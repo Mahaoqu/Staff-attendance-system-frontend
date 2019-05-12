@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store'
 
+import Dashbroad from '@/views/Dashbroad'
 Vue.use(Router);
 
 const router = new Router({
@@ -14,7 +15,7 @@ const router = new Router({
     },
     {
       path: '/',
-      component: () => import('@/views/Dashbroad'),
+      component: Dashbroad,
       children: [{
           path: "",
           component: () => import('@/views/Default')
@@ -53,11 +54,11 @@ router.beforeEach((to, from, next) => {
       next({
         path: '/'
       })
-    } else if (to.meta.role === undefined || to.meta.role.indexOf(to.path) !== -1) {
+    } else if (to.meta.role === undefined || to.meta.role.indexOf(store.state.role) !== -1) {
       next()
     } else {
       next({
-        path: "404"
+        path: `404?redirect=${to.path}`
       })
     }
   } else if (whiteList.indexOf(to.path) !== -1) { // 如果存在于白名单中，继续

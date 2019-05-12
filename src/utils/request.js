@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Message, MessageBox } from 'element-ui'
 
 const service = axios.create({
-  timeout: 1000,
+  timeout: 5000,
 });
 
 service.interceptors.response.use(
