@@ -25,8 +25,8 @@
       >导入Excel</el-button>
     </div>
 
-    <el-table :data="staffData" style="width: 100%" v-loading="listLoading">
-      <el-table-column prop="id" label="工号" width="180"></el-table-column>
+    <el-table :data="staffs" style="width: 100%" v-loading="listLoading">
+      <el-table-column prop="ID" label="工号" width="180"></el-table-column>
       <el-table-column prop="name" label="姓名" width="180"></el-table-column>
       <el-table-column label="年龄">
         <template slot-scope="scope">
@@ -59,19 +59,29 @@
 </template>
 
 <script>
-import { getStaffs, getDepartments } from "@/api/manager";
+import { getStaffs, getDepartments } from "@/api/staff";
 
 export default {
   async created() {
-    let data = await Promise.all(getDepartments(), this.getStaffData());
-    data.departments.forEach(x => {
-      this.departmentName[x.id] = x.name;
+    let departmentsData = {};
+    let staffsData = {};
+
+    [departmentsData, staffsData] = await Promise.all([
+      getDepartments(),
+      getStaffs()
+    ]);
+    
+    departmentsData.departments.forEach(x => {
+      this.departmentName[x.ID] = x.name;
     });
+    this.staffs = staffsData.staffs;
+    
+    this.listLoading = false;
   },
   data() {
     return {
       listLoading: true,
-      staffData: [],
+      staffs: [],
       departmentName: {},
       downloadLoading: false,
       uploadLoading: false,
@@ -86,11 +96,6 @@ export default {
       return Math.floor(
         (Date.now() - Date.parse(time)) / (365 * 24 * 60 * 60 * 1000)
       );
-    },
-    async getStaffData() {
-      const data = await getStaffs();
-      this.staffData = data.staffs;
-      this.listLoading = false;
     },
 
     handleEdit(index, row) {

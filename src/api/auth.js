@@ -17,3 +17,4 @@ export function logout() {
     method: 'post'
   })
 }
+

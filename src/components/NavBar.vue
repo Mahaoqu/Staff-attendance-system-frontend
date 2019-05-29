@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { getCurrentRole } from "@/utils/storage";
+
 export default {
   data() {
     return {
@@ -57,16 +59,13 @@ export default {
   },
   computed: {
     isManager() {
-      return this.$store.state.role === "manager";
+      return getCurrentRole() === "manager";
     },
     isStaff() {
-      return (
-        this.$store.state.role === "staff" ||
-        this.$store.state.role === "charge"
-      );
+      return getCurrentRole() === "staff" || getCurrentRole() === "charge";
     },
     isCharge() {
-      return this.$store.state.role === "charge";
+      return getCurrentRole() === "charge";
     }
   },
   methods: {

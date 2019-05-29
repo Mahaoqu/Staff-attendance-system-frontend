@@ -40,7 +40,16 @@
 </template>
 
 <script>
-import { getUserInfo, patchUserInfo } from "@/api/userinfo";
+import { getStaff, modifyStaff } from "@/api/staff";
+import { getCurrentID } from "@/utils/storage";
+
+async function getUserInfo() {
+  return await getStaff(getCurrentID());
+}
+
+async function patchUserInfo(info) {
+  return await modifyStaff(getCurrentID(), info);
+}
 
 function compare(obj1, obj2) {
   let keys = Object.keys(obj1);

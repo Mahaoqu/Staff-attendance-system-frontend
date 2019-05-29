@@ -4,16 +4,13 @@ import Vuex from 'vuex';
 import {
   login,
   logout
-} from '@/api/login'
+} from '@/api/auth'
 
-import {
-  getRole
-} from "@/api/userinfo";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    role : ""
+
   },
   mutations: {
     SET_ROLE: (state, role) => {
@@ -26,13 +23,9 @@ const store = new Vuex.Store({
     }, form) {
       const loginData = await login(form.id, form.password)
       sessionStorage.setItem('isLogin', true)
+      sessionStorage.setItem('ID', form.id)
+      sessionStorage.setItem('role', loginData.role)
       return loginData
-    },
-    async GetRole({
-      commit
-    }) {
-      const data = await getRole()
-      commit('SET_ROLE', data.role)
     },
     async LogOut({
       commit,
@@ -40,6 +33,8 @@ const store = new Vuex.Store({
     }) {
       const logoutData = await logout(state.token)
       sessionStorage.removeItem('isLogin')
+      sessionStorage.removeItem('ID')
+      sessionStorage.removeItem('role')
       return logoutData
     }
   },
