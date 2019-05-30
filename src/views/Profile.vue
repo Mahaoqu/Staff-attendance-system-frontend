@@ -2,7 +2,7 @@
   <el-form ref="info" :model="info" label-width="120px" class="profile-form">
     <h3>个人信息</h3>
     <el-form-item label="工号">
-      <el-input v-model="info.id" :disabled="true"></el-input>
+      <el-input v-model="info.ID" :disabled="true"></el-input>
     </el-form-item>
     <el-form-item label="姓名">
       <el-input v-model="info.name" :disabled="true"></el-input>
@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import { getStaff, modifyStaff } from "@/api/staff";
+import { get_staff_with_depart_name, modifyStaff } from "@/api/restful";
 import { getCurrentID } from "@/utils/storage";
 
 async function getUserInfo() {
-  return await getStaff(getCurrentID());
+  return await get_staff_with_depart_name(getCurrentID());
 }
 
 async function patchUserInfo(info) {

@@ -38,11 +38,7 @@
           <span>{{ scope.row.gender === 'male' ? '男' : '女' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="所属部门">
-        <template slot-scope="scope">
-          <span>{{ departmentName[scope.row.departmentId ] }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="department" label="所属部门"></el-table-column>
       <el-table-column prop="role" label="职位">
         <template slot-scope="scope">
           <span>{{ roleName[scope.row.role] }}</span>
@@ -59,30 +55,17 @@
 </template>
 
 <script>
-import { getStaffs, getDepartments } from "@/api/staff";
+import { get_all_staffs_with_depart_name } from "@/api/restful";
 
 export default {
   async created() {
-    let departmentsData = {};
-    let staffsData = {};
-
-    [departmentsData, staffsData] = await Promise.all([
-      getDepartments(),
-      getStaffs()
-    ]);
-    
-    departmentsData.departments.forEach(x => {
-      this.departmentName[x.ID] = x.name;
-    });
-    this.staffs = staffsData.staffs;
-    
+    this.staffs = await get_all_staffs_with_depart_name();
     this.listLoading = false;
   },
   data() {
     return {
       listLoading: true,
       staffs: [],
-      departmentName: {},
       downloadLoading: false,
       uploadLoading: false,
       roleName: {

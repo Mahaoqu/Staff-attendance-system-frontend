@@ -1,9 +1,7 @@
-import request from '@/utils/request'
+import axios from '@/utils/request'
 
 export function login(id, password) {
-  return request({
-    url: '/auth/login',
-    method: 'post',
+  return axios.post('/auth/login', {
     data: {
       id,
       password
@@ -12,9 +10,5 @@ export function login(id, password) {
 }
 
 export function logout() {
-  return request({
-    url: '/auth/logout',
-    method: 'post'
-  })
+  return axios.post('/auth/logout')
 }
-
