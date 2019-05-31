@@ -7,13 +7,13 @@ import axios from '@/utils/request'
 // 部门
 
 export function getDepartments() {
-  return axios.get('/departments')
+  return axios.get('/departments/')
 }
 
 // 员工信息
 
 export function getStaffs() {
-  return axios.get('/staffs')
+  return axios.get('/staffs/')
 }
 
 export function getStaff(id) {
@@ -27,9 +27,7 @@ export function newStaff(id, info) {
 }
 
 export function modifyStaff(id, info) {
-  return axios.put('/staffs/' + id, {
-    data: info
-  })
+  return axios.put('/staffs/' + id, info)
 }
 
 export function deleteStaff(id) {
@@ -43,7 +41,7 @@ export function getStaffsByDepartment(id) {
 // 加班记录
 
 export function getOvertimes() {
-  return axios.get('/tempovertimes')
+  return axios.get('/tempovertimes/')
 }
 
 export function getOvertime(id) {
@@ -51,7 +49,7 @@ export function getOvertime(id) {
 }
 
 export function newOvertime(info) {
-  return axios.get('/tempovertimes')
+  return axios.post('/tempovertimes/')
 }
 
 export function modifyOvertime(info) {
@@ -71,7 +69,7 @@ export function getOvertimeByDepartmentID(departmentID) {
 // 临时加班记录
 
 export function getTemporaryOvertimes() {
-  return axios.get('/tempovertimes')
+  return axios.get('/tempovertimes/')
 }
 
 export function getTemporaryOvertime(id) {
@@ -79,7 +77,7 @@ export function getTemporaryOvertime(id) {
 }
 
 export function newTemporaryOvertime(info) {
-  return axios.get('/tempovertimes')
+  return axios.post('/tempovertimes/')
 }
 
 export function modifyTemporaryOvertime(info) {
@@ -91,7 +89,7 @@ export function modifyTemporaryOvertime(info) {
 // 请假记录
 
 export function getLeaves() {
-  return axios.get('/leaves')
+  return axios.get('/leaves/')
 }
 
 export function getLeave(id) {
@@ -117,7 +115,7 @@ export function deleteLeave(id) {
 // 时间安排
 
 export function getArrangements() {
-  return axios.get('/arrangements')
+  return axios.get('/arrangements/')
 }
 
 export function getArrangement(id) {
@@ -145,7 +143,7 @@ export function getArrangementsByDepartment(d_id) {
 }
 
 export function getArrangementsByStaff(id, date) {
-  return axios.get('/arrangements', {
+  return axios.get('/arrangements/', {
     params: {
       ID: id,
       date: date
@@ -175,6 +173,7 @@ export async function get_dep_staffs_with_depart_name(department_id) {
 
   for (let staff of staffs.staffs) {
     staff.department = nameMap[staff.departmentID]
+    staff.role = ["经理", "主管", "员工"][staff.identity]
   }
 
   return staffs.staffs
@@ -187,6 +186,7 @@ export async function get_all_staffs_with_depart_name() {
 
   for (let staff of staffs.staffs) {
     staff.department = nameMap[staff.departmentID]
+    staff.role = ["经理", "主管", "员工"][staff.identity]
   }
 
   return staffs.staffs
@@ -197,5 +197,7 @@ export async function get_staff_with_depart_name(uid) {
     [getStaff(uid), getDepartments()])
   let nameMap = parseDepartment(departments)
   staff.department = nameMap[staff.departmentID]
+  staff.role = ["", "员工", "主管", "经理"][parseInt(staff.identity)]
+  console.log(parseInt(staff.identity))
   return staff
 }
