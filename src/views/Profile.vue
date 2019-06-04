@@ -2,32 +2,39 @@
   <el-form ref="info" :model="info" label-width="120px" class="profile-form">
     <h3>个人信息</h3>
     <el-form-item label="工号">
-      <el-input v-model="info.ID" :disabled="true"></el-input>
+      <el-input v-model="info.ID" :disabled="true"/>
     </el-form-item>
     <el-form-item label="姓名">
-      <el-input v-model="info.name" :disabled="true"></el-input>
+      <el-input v-model="info.name" :disabled="true"/>
     </el-form-item>
     <el-form-item label="所属部门">
-      <el-input v-model="info.department" :disabled="true"></el-input>
+      <el-select v-model="info.departmentID" placeholder="选择部门" :disabled="true">
+        <el-option
+          v-for="item in departmentList"
+          :key="item.ID"
+          :label="item.name"
+          :value="item.ID"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="角色">
-      <el-select v-model="info.role" disabled>
+      <el-select v-model="info.identity" disabled>
         <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
+          v-for="item in roleList"
+          :key="item.ID"
+          :label="item.name"
+          :value="item.ID"
+        />
       </el-select>
     </el-form-item>
     <el-form-item label="出生日期">
-      <el-date-picker v-model="info.birthday" type="date" :disabled="true"></el-date-picker>
+      <el-date-picker v-model="info.birthday" type="date" :disabled="true"/>
     </el-form-item>
     <el-form-item label="email">
-      <el-input v-model="info.email" :disabled="!revise"></el-input>
+      <el-input v-model="info.email" :disabled="!revise"/>
     </el-form-item>
     <el-form-item label="下班提醒" prop="notification">
-      <el-switch v-model="info.notification" :disabled="!revise"></el-switch>
+      <el-switch v-model="info.notification" :disabled="!revise"/>
     </el-form-item>
     <el-form-item v-show="revise">
       <el-button type="success" @click="patchForm" :loading="onSubmit" class="sub-button">确认更改</el-button>
@@ -40,16 +47,8 @@
 </template>
 
 <script>
-import { get_staff_with_depart_name, modifyStaff } from "@/api/restful";
-import { getCurrentID } from "@/utils/storage";
-
-async function getUserInfo() {
-  return await get_staff_with_depart_name(getCurrentID());
-}
-
-async function patchUserInfo(info) {
-  return await modifyStaff(getCurrentID(), info);
-}
+import { getStaff, modifyStaff } from "@/api/restful";
+import { getCurrentID, roleList, departmentList } from "@/utils/storage";
 
 function compare(obj1, obj2) {
   let keys = Object.keys(obj1);
@@ -70,22 +69,24 @@ let originInfo = {};
 export default {
   data() {
     return {
+      departmentList: [],
+      roleList: [],
       revise: false,
       onSubmit: false,
-      info: {},
-      options: [
-        { value: "manager", label: "经理" },
-        { value: "charge", label: "部门主管" },
-        { value: "staff", label: "员工" }
-      ]
+      info: {}
     };
   },
-  created() {
-    this.getForm();
+  async created() {
+    let _ = undefined;
+    [this.departmentList, this.roleList, _] = await Promise.all([
+      departmentList(),
+      roleList(),
+      this.getForm()
+    ]);
   },
   methods: {
     async getForm() {
-      originInfo = await getUserInfo();
+      originInfo = await getStaff(getCurrentID());
       this.info = { ...originInfo };
     },
     async patchForm() {
@@ -93,7 +94,8 @@ export default {
       try {
         if (changed) {
           this.onSubmit = true;
-          await patchUserInfo(this.info);
+          await modifyStaff(this.info);
+          console.log("...");
         }
         this.$notify({
           title: "提交成功",
@@ -103,10 +105,11 @@ export default {
       } catch {
         this.$notify.error()({
           title: "错误",
-          message: "提交修改时出现了一些错误，请稍后重试。"
+          message: "提交修改时出现了一些错误，请稍后重试。",
+          type: "error"
         });
       }
-      this.getForm(); // 更新后重新获取信息
+      await this.getForm(); // 更新后重新获取信息
       this.onSubmit = false;
       this.revise = false;
     },

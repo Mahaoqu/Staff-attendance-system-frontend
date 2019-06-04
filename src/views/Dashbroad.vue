@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar></NavBar>
+    <NavBar/>
     <router-view/>
   </div>
 </template>
@@ -16,12 +16,8 @@ export default {
   data() {
     return {};
   },
-  created() {
-    
-  },
-  methods: {
-    
-  }
+  created() {},
+  methods: {}
 };
 </script>
 

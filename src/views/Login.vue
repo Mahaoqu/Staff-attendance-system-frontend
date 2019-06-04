@@ -10,7 +10,7 @@
             { required: true, message: '请输入您的工号', trigger: 'blur' },
           ]"
         >
-          <el-input v-model="form.id" placeholder="80000"></el-input>
+          <el-input v-model="form.id" placeholder="80000"/>
         </el-form-item>
         <el-form-item
           prop="password"
@@ -19,7 +19,7 @@
             { required: true, message: '请您输入密码', trigger: 'blur' },
           ]"
         >
-          <el-input v-model="form.password" placeholder="******" :type="password_type"></el-input>
+          <el-input v-model="form.password" placeholder="******" :type="password_type"/>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click.prevent="onLogin" :loading="loading">登录</el-button>

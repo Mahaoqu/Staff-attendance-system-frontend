@@ -20,14 +20,14 @@ export function getStaff(id) {
   return axios.get('/staffs/' + id)
 }
 
-export function newStaff(id, info) {
-  return axios.post('/staffs/' + id, {
-    data: info
-  })
+export function newStaff(info) {
+  console.log(info)
+  return axios.post('/staffs/', info)
 }
 
-export function modifyStaff(id, info) {
-  return axios.put('/staffs/' + id, info)
+export function modifyStaff(info) {
+  console.log(info)
+  return axios.put('/staffs/' + info.ID, info)
 }
 
 export function deleteStaff(id) {
@@ -49,7 +49,7 @@ export function getOvertime(id) {
 }
 
 export function newOvertime(info) {
-  return axios.post('/tempovertimes/')
+  return axios.post('/tempovertimes/' + info.ID, info)
 }
 
 export function modifyOvertime(info) {
@@ -77,13 +77,11 @@ export function getTemporaryOvertime(id) {
 }
 
 export function newTemporaryOvertime(info) {
-  return axios.post('/tempovertimes/')
+  return axios.post('/tempovertimes/', info)
 }
 
 export function modifyTemporaryOvertime(info) {
-  return axios.put('/tempovertimes/' + id, {
-    data: info
-  })
+  return axios.put('/tempovertimes/' + info.ID, info)
 }
 
 // 请假记录
@@ -96,16 +94,12 @@ export function getLeave(id) {
   return axios.get('/leaves/' + id)
 }
 
-export function newLeave(id, info) {
-  return axios.post('/leaves/' + id, {
-    data: info
-  })
+export function newLeave(info) {
+  return axios.post('/leaves/', info)
 }
 
-export function modifyLeave(id, info) {
-  return axios.put('/leaves/' + id, {
-    data: info
-  })
+export function modifyLeave(info) {
+  return axios.put('/leaves/' + info.ID, info)
 }
 
 export function deleteLeave(id) {
@@ -122,16 +116,12 @@ export function getArrangement(id) {
   return axios.get('/arrangements/' + id)
 }
 
-export function newArrangement(id, info) {
-  return axios.post('/arrangements/' + id, {
-    data: info
-  })
+export function newArrangement(info) {
+  return axios.post('/arrangements/', info)
 }
 
-export function modifyArrangement(id, info) {
-  return axios.put('/arrangements/' + id, {
-    data: info
-  })
+export function modifyArrangement(info) {
+  return axios.put('/arrangements/' + info.ID, info)
 }
 
 export function deleteArrangement(id) {
@@ -149,55 +139,4 @@ export function getArrangementsByStaff(id, date) {
       date: date
     }
   })
-}
-
-// ========== 
-//  实用方法
-// ==========
-
-// 输入一个数据对象数组，返回ID：名称的映射。
-function parseDepartment(d) {
-
-  let mapping = {}
-  d.departments.forEach(x => {
-    mapping[x.ID] = x.name;
-  })
-  return mapping
-}
-
-// 根据部门获取员工信息，将员工部门名称添加到
-export async function get_dep_staffs_with_depart_name(department_id) {
-  let [staffs, departments] = await Promise.all(
-    [getStaffsByDepartment(department_id), getDepartments()])
-  let nameMap = parseDepartment(departments)
-
-  for (let staff of staffs.staffs) {
-    staff.department = nameMap[staff.departmentID]
-    staff.role = ["经理", "主管", "员工"][staff.identity]
-  }
-
-  return staffs.staffs
-}
-
-export async function get_all_staffs_with_depart_name() {
-  let [staffs, departments] = await Promise.all(
-    [getStaffs(), getDepartments()])
-  let nameMap = parseDepartment(departments)
-
-  for (let staff of staffs.staffs) {
-    staff.department = nameMap[staff.departmentID]
-    staff.role = ["经理", "主管", "员工"][staff.identity]
-  }
-
-  return staffs.staffs
-}
-
-export async function get_staff_with_depart_name(uid) {
-  let [staff, departments] = await Promise.all(
-    [getStaff(uid), getDepartments()])
-  let nameMap = parseDepartment(departments)
-  staff.department = nameMap[staff.departmentID]
-  staff.role = ["", "员工", "主管", "经理"][parseInt(staff.identity)]
-  console.log(parseInt(staff.identity))
-  return staff
 }

@@ -3,19 +3,19 @@
     <el-menu :default-active="activeIndex" mode="horizontal" :router="true">
       <el-menu-item index="/">首页</el-menu-item>
       <template v-if="isManager">
-        <el-menu-item v-for="i in manager" :key="i.route" :index="i.route">{{i.name}}</el-menu-item>
+        <el-menu-item v-for="i in manager" :key="i.route" :index="i.route">{{ i.name }}</el-menu-item>
       </template>
       <template v-if="isStaff">
-        <el-menu-item v-for="i in staff" :key="i.route" :index="i.route">{{i.name}}</el-menu-item>
+        <el-menu-item v-for="i in staff" :key="i.route" :index="i.route">{{ i.name }}</el-menu-item>
         <el-submenu index="/apply">
           <template slot="title">申请</template>
-          <el-menu-item v-for="i in staff2" :key="i.route" :index="i.route">{{i.name}}</el-menu-item>
+          <el-menu-item v-for="i in staff2" :key="i.route" :index="i.route">{{ i.name }}</el-menu-item>
         </el-submenu>
       </template>
       <template v-if="isCharge">
         <el-submenu index="/charge">
           <template slot="title">部门管理</template>
-          <el-menu-item v-for="i in charge" :key="i.route" :index="i.route">{{i.name}}</el-menu-item>
+          <el-menu-item v-for="i in charge" :key="i.route" :index="i.route">{{ i.name }}</el-menu-item>
         </el-submenu>
       </template>
       <el-submenu index="/user" class="user-submenu">
