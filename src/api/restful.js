@@ -21,12 +21,10 @@ export function getStaff(id) {
 }
 
 export function newStaff(info) {
-  console.log(info)
   return axios.post('/staffs/', info)
 }
 
 export function modifyStaff(info) {
-  console.log(info)
   return axios.put('/staffs/' + info.ID, info)
 }
 

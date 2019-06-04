@@ -32,6 +32,14 @@ const router = new Router({
           meta: {
             role: ['manager']
           }
+        },
+        {
+          path: 'leave',
+          component: () => import('@/views/Staff/Leaves')
+        },
+        {
+          path: 'overwork',
+          component: () => import('@/views/Staff/Overwork')
         }
       ]
     },

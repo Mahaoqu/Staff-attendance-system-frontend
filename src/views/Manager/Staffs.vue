@@ -97,7 +97,6 @@
             v-model="edit.birthday"
             type="date"
             format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
           />
         </el-form-item>
         <el-form-item label="电子邮箱" :label-width="formLabelWidth">
@@ -149,7 +148,6 @@
             v-model="newbie.birthday"
             type="date"
             format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
           />
         </el-form-item>
         <el-form-item label="电子邮箱" :label-width="formLabelWidth">
