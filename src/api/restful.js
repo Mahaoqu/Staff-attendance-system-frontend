@@ -39,25 +39,23 @@ export function getStaffsByDepartment(id) {
 // 加班记录
 
 export function getOvertimes() {
-  return axios.get('/tempovertimes/')
+  return axios.get('/overtimes/')
 }
 
 export function getOvertime(id) {
-  return axios.get('/tempovertimes/' + id)
+  return axios.get('/overtimes/' + id)
 }
 
 export function newOvertime(info) {
-  return axios.post('/tempovertimes/' + info.ID, info)
+  return axios.post('/overtimes/', info)
 }
 
 export function modifyOvertime(info) {
-  return axios.put('/tempovertimes/' + id, {
-    data: info
-  })
+  return axios.put('/overtimes/' + id, info)
 }
 
 export function getOvertimeByStaff(staffID) {
-  return axios.get('/tempovertimes/?staffID=' + staffID)
+  return axios.get('/overtimes/?staffID=' + staffID)
 }
 
 export function getOvertimeByDepartmentID(departmentID) {

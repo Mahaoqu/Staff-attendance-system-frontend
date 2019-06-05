@@ -50,8 +50,8 @@ export default {
         { name: "申请加班", route: "/overwork" }
       ],
       charge: [
-        { name: "请假审批", route: "/leave-approve" },
-        { name: "加班审批", route: "/overwork-approve" },
+        { name: "请假审批", route: "/leave-review" },
+        { name: "加班审批", route: "/overwork-review" },
         { name: "安排工作", route: "/arrange-work" },
         { name: "工作情况", route: "/department-work" }
       ]

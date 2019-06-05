@@ -34,13 +34,51 @@ const router = new Router({
           }
         },
         {
+          path: 'temp-overtime',
+          component: () => import('@/views/Manager/TemporaryOverwork'),
+          meta: {
+            role: ['manager']
+          }
+        },
+        {
+          path: 'all-work',
+          component: () => import('@/views/Manager/AllStatus'),
+          meta: {
+            role: ['manager']
+          }
+        },
+        {
           path: 'leave',
-          component: () => import('@/views/Staff/Leaves')
+          component: () => import('@/views/Staff/Leave')
         },
         {
           path: 'overwork',
           component: () => import('@/views/Staff/Overwork')
-        }
+        },
+        {
+          path: 'arrange',
+          component: () => import('@/views/Staff/Arrange')
+        },
+        {
+          path: 'work-status',
+          component: () => import('@/views/Staff/WorkStatus')
+        },
+        {
+          path: 'leave-review',
+          component: () => import('@/views/Charge/LeaveManagement')
+        },
+        {
+          path: 'overwork-review',
+          component: () => import('@/views/Charge/OverworkManagement')
+        },
+        {
+          path: 'arrange-work',
+          component: () => import('@/views/Charge/Arrangement')
+        },
+        {
+          path: 'department-work',
+          component: () => import('@/views/Charge/DepartmentStatus')
+        },
       ]
     },
     {

@@ -19,8 +19,8 @@ service.interceptors.request.use(config => {
         // ISO格式, '2018-08-08'
         d[prop] = config.data[prop].toISOString().slice(0, 10)
       } else if (prop.endsWith('stamp') || prop.endsWith('DateTime')) {
-        // Unix格式，'1559656190798'
-        d[prop] = parseInt(config.data[prop].toString())
+        // Unix格式, '1559656190798'. JS中为从1970/1/1至今的毫秒值.
+        d[prop] = config.data[prop].getTime() / 1000
       } else {
         d[prop] = config.data[prop]
       }
@@ -33,7 +33,7 @@ service.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-// 在请求后调用
+// 在请求返回后调用
 service.interceptors.response.use(
   response => {
     const res = response.data
@@ -46,21 +46,24 @@ service.interceptors.response.use(
       return Promise.reject('error')
     } else {
 
+      let d = res.data
+      // 返回的值可能是数组或者对象...
       // 格式化日期和时间
       for (let prop in res.data) {
         if (prop === 'birthday' || prop.endsWith('Date')) {
           // ISO格式, '2018-08-08'
-          d[prop] = Date.parse(res.data[prop])
+          d[prop] = Date.parse(d[prop])
         } else if (prop.endsWith('stamp') || prop.endsWith('DateTime')) {
           // Unix格式，1559656190798
-          d[prop] = new Date(parseInt(res.data[prop]))
+          d[prop] = new Date(parseInt(d[prop]))
         } else if (prop.endsWith('Time')) {
           // 普通格式, '19:22'不解析
-          d[prop] = res.data[prop]
+          d[prop] = d[prop]
+        } else {
+          d[prop] = d[prop]
         }
       }
-
-      return res.data
+      return d
     }
   },
   error => {

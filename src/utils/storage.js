@@ -20,6 +20,7 @@ async function loadDepartments() {
   let d = await getDepartments()
   department_list = d;
   department_mapping = {};
+  console.log(d)
   d.forEach(x => {
     department_mapping[x.ID] = x.name;
   })
