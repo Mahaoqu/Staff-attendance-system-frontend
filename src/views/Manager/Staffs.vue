@@ -93,11 +93,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="出生日期" :label-width="formLabelWidth">
-          <el-date-picker
-            v-model="edit.birthday"
-            type="date"
-            format="yyyy 年 MM 月 dd 日"
-          />
+          <el-date-picker v-model="edit.birthday" type="date" format="yyyy 年 MM 月 dd 日"/>
         </el-form-item>
         <el-form-item label="电子邮箱" :label-width="formLabelWidth">
           <el-input v-model="edit.email"/>
@@ -144,11 +140,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="出生日期" :label-width="formLabelWidth">
-          <el-date-picker
-            v-model="newbie.birthday"
-            type="date"
-            format="yyyy 年 MM 月 dd 日"
-          />
+          <el-date-picker v-model="newbie.birthday" type="date" format="yyyy 年 MM 月 dd 日"/>
         </el-form-item>
         <el-form-item label="电子邮箱" :label-width="formLabelWidth">
           <el-input v-model="newbie.email"/>

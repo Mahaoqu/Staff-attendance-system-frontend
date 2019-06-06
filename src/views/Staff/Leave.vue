@@ -33,16 +33,27 @@
 </template>
 
 <script>
+import {
+  getLeavesByStaff,
+  newLeave,
+  modifyLeave,
+} from "@/api/restful";
+
 export default {
-  created() {},
+  async created() {
+    await refreash()
+  },
   data() {
     return {
+      items: [],
       newitem: {},
       formLabelWidth: "120px"
     };
   },
   methods: {
-    refreash: () => {},
+    refreash: function () {
+      
+    },
     clearItem: function() {
       this.newitem = {};
     },

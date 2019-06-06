@@ -1,18 +1,25 @@
 <template>
-  <div>
-    <el-table></el-table>
-  </div>
+
 </template>
 
 <script>
+import {} from "@/api/restful";
+
 export default {
-  created() {},
   data() {
-    return {};
+    return {
+
+    };
   },
-  methods: {}
+  computed: {
+
+  },
+  methods: {
+
+  }
 };
 </script>
 
 <style>
 </style>
+

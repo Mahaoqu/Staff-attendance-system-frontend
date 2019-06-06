@@ -54,11 +54,11 @@ export function modifyOvertime(info) {
   return axios.put('/overtimes/' + id, info)
 }
 
-export function getOvertimeByStaff(staffID) {
+export function getOvertimesByStaff(staffID) {
   return axios.get('/overtimes/?staffID=' + staffID)
 }
 
-export function getOvertimeByDepartmentID(departmentID) {
+export function getOvertimesByDepartmentID(departmentID) {
   return axios.get('/tempovertimes/?departmentID=' + departmentID)
 }
 
@@ -100,6 +100,14 @@ export function modifyLeave(info) {
 
 export function deleteLeave(id) {
   return axios.delete('/leaves/' + id)
+}
+
+export function getLeavesByStaff(staffID) {
+  return axios.get('/overtimes/?staffID=' + staffID)
+}
+
+export function getLeavesByDepartmentID(departmentID) {
+  return axios.get('/tempovertimes/?departmentID=' + departmentID)
 }
 
 // 时间安排

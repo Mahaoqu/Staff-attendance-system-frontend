@@ -10,23 +10,20 @@ const service = axios.create({
 // 在请求之前调用
 service.interceptors.request.use(config => {
   if (config.data) {
-    let d = {}
-
     for (let prop in config.data) {
       if (config.data[prop] == null) {
-        break; // 去除所有空属性
+        delete config.data[prop] // 去除所有空属性
       } else if (prop === 'birthday' || prop.endsWith('Date')) {
         // ISO格式, '2018-08-08'
-        d[prop] = config.data[prop].toISOString().slice(0, 10)
+        config.data[prop] = config.data[prop].toISOString().slice(0, 10)
       } else if (prop.endsWith('stamp') || prop.endsWith('DateTime')) {
         // Unix格式, '1559656190798'. JS中为从1970/1/1至今的毫秒值.
-        d[prop] = config.data[prop].getTime() / 1000
+        config.data[prop] = config.data[prop].getTime() / 1000
       } else {
-        d[prop] = config.data[prop]
+        config.data[prop] = config.data[prop]
       }
     }
     // 格式化时间和日期
-    config.data = d;
   }
   return config;
 }, error => {
