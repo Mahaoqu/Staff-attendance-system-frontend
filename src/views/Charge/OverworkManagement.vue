@@ -1,6 +1,6 @@
 <template>
   <el-table :data="items" v-loading="listLoading" :row-class-name="tableRowClassName">
-    <el-table-column prop="staffName" label="请假人"></el-table-column>
+    <el-table-column prop="staffName" label="加班申请人"></el-table-column>
     <el-table-column prop="beginDateTime" label="开始时间" width="180">
       <template slot-scope="scope">
         <el-tooltip

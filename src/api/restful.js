@@ -118,12 +118,28 @@ export function deleteLeave(id) {
   return axios.delete('/leaves/' + id)
 }
 
+export function permitLeave(ID) {
+  return axios.put('/leaves/' + ID + '?permit=true')
+}
+
+export function rejectLeave(ID) {
+  return axios.put('/leaves/' + ID + '?reject=true')
+}
+
+export function reportLeave(id) {
+  return axios.put('/leaves/' + id + '?report=true')
+}
+
 export function getLeavesByStaff(staffID) {
-  return axios.get('/overtimes/?staffID=' + staffID)
+  return axios.get('/leaves/?staffID=' + staffID)
+}
+
+export function getLeavesByCharge(chargeID) {
+  return axios.get('/leaves/?chargeID=' + chargeID)
 }
 
 export function getLeavesByDepartmentID(departmentID) {
-  return axios.get('/tempovertimes/?departmentID=' + departmentID)
+  return axios.get('/leaves/?departmentID=' + departmentID)
 }
 
 // 时间安排
