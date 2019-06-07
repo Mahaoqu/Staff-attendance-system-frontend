@@ -1,6 +1,32 @@
 <template>
   <div>
-    <el-table></el-table>
+    <el-table :data="items" v-loading="listLoading">
+      <el-table-column prop="beginDate" label="加班日期" width="180"></el-table-column>
+      <el-table-column prop="beginTime" label="开始时间" width="180"></el-table-column>
+      <el-table-column prop="endTime" label="结束时间" width="180"></el-table-column>
+      <el-table-column label="加班时长" width="180">
+        <template slot-scope="scope">
+          <span>{{ duration(scope.row) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" width="180">
+        <template slot-scope="scope">
+          <span>{{ status_mapping[scope.row.status] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="提交时间" width="180">
+        <template slot-scope="scope">
+          <span>{{ scope.row.submitStamp | moment("from", "now") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="reviewerName" label="审批人" width="180"></el-table-column>
+      <el-table-column prop="reviewStamp" label="审批时间" width="180"></el-table-column>
+      <el-table-column label="操作" fixed="right">
+        <template slot-scope="scope">
+          <el-button size="mini" type="danger" @click="handleCancel(scope.$index, scope.row)">取消</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <el-form :model="newitem">
       <h3>新加班申请：</h3>
@@ -33,36 +59,49 @@ import {
   getOvertime,
   newOvertime,
   modifyOvertime,
-  getOvertimeByStaff,
+  deleteOvertime,
+  getOvertimesByStaff,
   getOvertimeByDepartmentID
 } from "@/api/restful";
 
 import { getCurrentID } from "@/utils/storage";
 
 export default {
-  created() {},
-  computed: {
-    start_time: function() {
-      return 1;
-    }
+  async created() {
+    await this.refreash();
   },
+  computed: {},
   data() {
     return {
+      items: [],
       newitem: {},
       timeOptions: {
         start: "00:00",
         step: "00:30",
         end: "23:30"
       },
-      formLabelWidth: "120px"
+      status_mapping: ["未审批", "已通过", "未通过", "已过期"],
+
+      formLabelWidth: "120px",
+      listLoading: false
     };
   },
   methods: {
-    refreash: () => {},
-    clearItem: function() {
+    tableRowClassName({ row, rowIndex }) {
+      if (row.status == 2) {
+        return "warning-row";
+      } else if (row.status === 1) {
+        return "success-row";
+      }
+      return "";
+    },
+    async refreash() {
+      this.items = await getOvertimesByStaff(getCurrentID());
+    },
+    clearItem() {
       this.newitem = {};
     },
-    postItem: async function() {
+    async postItem() {
       // 不发送 beginTime 而是 beginDateTime
       let o = { ...this.newitem };
       let [h, m] = o.beginTime.split(":").map(s => parseInt(s));
@@ -85,10 +124,26 @@ export default {
       });
       this.clearItem();
       await this.refreash();
+    },
+
+    duration(overtime) {
+      return 1;
+    },
+
+    async handleCancel(index, row) {
+      await deleteOvertime(row.ID);
+      await this.refreash();
     }
   }
 };
 </script>
 
 <style>
+.el-table .warning-row {
+  background: oldlace;
+}
+
+.el-table .success-row {
+  background: #f0f9eb;
+}
 </style>

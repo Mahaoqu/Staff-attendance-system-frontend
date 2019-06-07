@@ -51,7 +51,11 @@ export function newOvertime(info) {
 }
 
 export function modifyOvertime(info) {
-  return axios.put('/overtimes/' + id, info)
+  return axios.put('/overtimes/' + info.ID, info)
+}
+
+export function deleteOvertime(id) {
+  return axios.delete('/overtimes/' + id)
 }
 
 export function getOvertimesByStaff(staffID) {
