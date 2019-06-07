@@ -1,12 +1,38 @@
 <template>
   <div>
-    <el-table :data="items" v-loading="listLoading">
-      <el-table-column prop="beginDate" label="加班日期" width="180"></el-table-column>
-      <el-table-column prop="beginTime" label="开始时间" width="180"></el-table-column>
-      <el-table-column prop="endTime" label="结束时间" width="180"></el-table-column>
+    <el-table :data="items" v-loading="listLoading" :row-class-name="tableRowClassName">
+      <el-table-column prop="beginDateTime" label="开始时间" width="180">
+        <template slot-scope="scope">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.endDateTime.toLocaleString()"
+            placement="top-start"
+          >
+            <span>{{ scope.row.beginDateTime | moment('calendar') }}</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column prop="endDateTime" label="结束时间" width="180">
+        <template slot-scope="scope">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.endDateTime.toLocaleString()"
+            placement="top-start"
+          >
+            <span>{{ scope.row.endDateTime | moment('calendar') }}</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column label="加班时长" width="180">
         <template slot-scope="scope">
-          <span>{{ duration(scope.row) }}</span>
+          <span>{{ scope.row.endDateTime - scope.row.beginDateTime | duration('humanize')}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="原因" width="180">
+        <template slot-scope="scope">
+          <span>{{ scope.row.reason }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" width="180">
@@ -16,14 +42,18 @@
       </el-table-column>
       <el-table-column label="提交时间" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.submitStamp | moment("from", "now") }}</span>
+          <span>{{ fromNow(scope.row.submitStamp) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="reviewerName" label="审批人" width="180"></el-table-column>
-      <el-table-column prop="reviewStamp" label="审批时间" width="180"></el-table-column>
+      <el-table-column label="审批时间" width="180">
+        <template slot-scope="scope">
+          <span>{{ fromNow(scope.row.reviewStamp) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="handleCancel(scope.$index, scope.row)">取消</el-button>
+          <el-button size="mini" type="danger" @click="handleCancel(scope.$index, scope.row)" :disabled="scope.row.status != 0">取消</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -95,6 +125,12 @@ export default {
       }
       return "";
     },
+    fromNow(time) {
+      console.log(time);
+      if (time === undefined || time === null) {
+        return "-";
+      } else return this.$moment(time).fromNow();
+    },
     async refreash() {
       this.items = await getOvertimesByStaff(getCurrentID());
     },
@@ -105,16 +141,28 @@ export default {
       // 不发送 beginTime 而是 beginDateTime
       let o = { ...this.newitem };
       let [h, m] = o.beginTime.split(":").map(s => parseInt(s));
+      let [eh, em] = o.endTime.split(":").map(s => parseInt(s));
+
       let t = new Date();
       t.setMilliseconds(0);
       t.setSeconds(0);
       t.setMinutes(m);
       t.setHours(h);
+
       o.beginDateTime = t;
       delete o.beginTime;
 
-      // 添加 员工ID (似乎没有必要)
-      // o.staffID = getCurrentID();
+      let e = new Date();
+      e.setMilliseconds(0);
+      e.setSeconds(0);
+      // 比较beginTime和endTime 处理次日的情况
+      if (eh < h || (eh == h && em < m)) {
+        e.setDate(e.getDate() + 1);
+      }
+      e.setMinutes(em);
+      e.setHours(eh);
+      o.endDateTime = e;
+      delete o.endTime;
 
       await newOvertime(o);
 
@@ -126,12 +174,12 @@ export default {
       await this.refreash();
     },
 
-    duration(overtime) {
-      return 1;
-    },
-
     async handleCancel(index, row) {
       await deleteOvertime(row.ID);
+      this.$message({
+        type: "success",
+        message: "取消成功"
+      });
       await this.refreash();
     }
   }

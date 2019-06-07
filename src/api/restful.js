@@ -54,6 +54,14 @@ export function modifyOvertime(info) {
   return axios.put('/overtimes/' + info.ID, info)
 }
 
+export function permitOvertime(ID) {
+  return axios.put('/overtimes/' + ID + '?permit=true')
+}
+
+export function rejectOvertime(ID) {
+  return axios.put('/overtimes/' + ID + '?reject=true')
+}
+
 export function deleteOvertime(id) {
   return axios.delete('/overtimes/' + id)
 }
@@ -62,8 +70,12 @@ export function getOvertimesByStaff(staffID) {
   return axios.get('/overtimes/?staffID=' + staffID)
 }
 
+export function getOvertimesByCharge(departmentID) {
+  return axios.get('/overtimes/?chargeID=' + departmentID)
+}
+
 export function getOvertimesByDepartmentID(departmentID) {
-  return axios.get('/tempovertimes/?departmentID=' + departmentID)
+  return axios.get('/overtimes/?departmentID=' + departmentID)
 }
 
 // 临时加班记录

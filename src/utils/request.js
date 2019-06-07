@@ -7,23 +7,48 @@ const service = axios.create({
   timeout: 5000,
 });
 
+function inputParse(obj) {
+  for (let prop in obj) {
+    if (obj[prop] === null) {
+      delete obj[prop];
+    } else if (prop === 'birthday' || prop.endsWith('Date')) {
+      // ISO格式, '2018-08-08'
+      obj[prop] = Date.parse(obj[prop])
+    } else if (prop.endsWith('Stamp') || prop.endsWith('DateTime')) {
+      // Unix格式，1559656190798。后端返回秒为单位
+      obj[prop] = new Date(parseInt(obj[prop]) * 1000)
+    } else if (prop.endsWith('Time')) {
+      // 普通格式, '19:22'不解析
+      obj[prop] = obj[prop]
+    } else {
+      obj[prop] = obj[prop]
+    }
+  }
+  return obj
+}
+
+// 格式化时间和日期
+function outputParse(obj) {
+  for (let prop in obj) {
+    if (obj[prop] == null) {
+      delete obj[prop] // 去除所有空属性
+    } else if (prop === 'birthday' || prop.endsWith('Date')) {
+      // ISO格式, '2018-08-08'
+      obj[prop] = obj[prop].toISOString().slice(0, 10)
+    } else if (prop.endsWith('stamp') || prop.endsWith('DateTime')) {
+      // Unix格式, '1559656190798'. JS中为从1970/1/1至今的毫秒值.
+      obj[prop] = obj[prop].getTime() / 1000
+    } else {
+      obj[prop] = obj[prop]
+    }
+  }
+  return obj
+}
+
 // 在请求之前调用
 service.interceptors.request.use(config => {
   if (config.data) {
-    for (let prop in config.data) {
-      if (config.data[prop] == null) {
-        delete config.data[prop] // 去除所有空属性
-      } else if (prop === 'birthday' || prop.endsWith('Date')) {
-        // ISO格式, '2018-08-08'
-        config.data[prop] = config.data[prop].toISOString().slice(0, 10)
-      } else if (prop.endsWith('stamp') || prop.endsWith('DateTime')) {
-        // Unix格式, '1559656190798'. JS中为从1970/1/1至今的毫秒值.
-        config.data[prop] = config.data[prop].getTime() / 1000
-      } else {
-        config.data[prop] = config.data[prop]
-      }
-    }
-    // 格式化时间和日期
+    config.data = outputParse(config.data)
   }
   return config;
 }, error => {
@@ -42,25 +67,13 @@ service.interceptors.response.use(
       })
       return Promise.reject('error')
     } else {
-
-      let d = res.data
-      // 返回的值可能是数组或者对象...
-      // 格式化日期和时间
-      for (let prop in res.data) {
-        if (prop === 'birthday' || prop.endsWith('Date')) {
-          // ISO格式, '2018-08-08'
-          d[prop] = Date.parse(d[prop])
-        } else if (prop.endsWith('stamp') || prop.endsWith('DateTime')) {
-          // Unix格式，1559656190798
-          d[prop] = new Date(parseInt(d[prop]))
-        } else if (prop.endsWith('Time')) {
-          // 普通格式, '19:22'不解析
-          d[prop] = d[prop]
-        } else {
-          d[prop] = d[prop]
-        }
+      // 返回的值可能是对象或者对象的数组...
+      if (res.data instanceof Array) {
+        res.data.map(e => inputParse(e))
+      } else if (res.data instanceof Object) {
+        res.data = inputParse(res.data)
       }
-      return d
+      return res.data
     }
   },
   error => {
