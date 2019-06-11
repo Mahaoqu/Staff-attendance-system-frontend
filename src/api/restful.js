@@ -152,6 +152,15 @@ export function getArrangement(id) {
   return axios.get('/arrangements/' + id)
 }
 
+export function getArrangementsByIDandDate(staffID, date) {
+  return axios.get('/arrangements/', {
+    params: {
+      staffID: staffID,
+      date: date
+    }
+  })
+}
+
 export function newArrangement(info) {
   return axios.post('/arrangements/', info)
 }
@@ -175,4 +184,8 @@ export function getArrangementsByStaff(id, date) {
       date: date
     }
   })
+}
+
+export function getStatus(staffID) {
+  return axios.get('/workstatus') 
 }

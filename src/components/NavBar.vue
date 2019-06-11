@@ -43,7 +43,7 @@ export default {
       ],
       staff: [
         { name: "工作安排", route: "/arrange" },
-        { name: "签到历史", route: "/work-status" }
+        { name: "工作情况", route: "/work-status" }
       ],
       staff2: [
         { name: "请假", route: "/leave" },
