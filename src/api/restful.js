@@ -33,7 +33,7 @@ export function deleteStaff(id) {
 }
 
 export function getStaffsByDepartment(id) {
-  return axios.get('/staffs/departmentID=' + id)
+  return axios.get('/staffs/?departmentID=' + id)
 }
 
 // 加班记录
@@ -186,6 +186,16 @@ export function getArrangementsByStaff(id, date) {
     params: {
       ID: id,
       date: date
+    }
+  })
+}
+
+export function getArrangementsByRange(id, range) {
+  return axios.get('/arrangements/', {
+    params: {
+      staffID: id,
+      fromDate: range[0].toISOString().slice(0, 10),
+      toDate: range[1].toISOString().slice(0, 10)
     }
   })
 }
