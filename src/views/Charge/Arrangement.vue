@@ -21,7 +21,6 @@
     <br>
     <el-calendar
       #dateCell="{date, data}"
-      class="sas-calender"
       :range="range"
       v-show="this.currentStaff != null"
       v-loading="calendarLoading"
@@ -219,8 +218,4 @@ export default {
 </script>
 
 <style>
-.el-calendar-table .el-calendar-day {
-  height: unset;
-}
-/* 重置高度，以防止内容伸出框外 */
 </style>

@@ -1,0 +1,5 @@
+.el-calendar-table .el-calendar-day {
+    height: unset;
+}
+
+/* 重置高度，以防止内容伸出框外 */

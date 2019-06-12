@@ -1,16 +1,34 @@
 <template>
   <div>
-    <el-calendar #dateCell="{date, data}" class="sas-calender" :range="range">
-      {{ data.day.split('-')[2] }}
-      {{ data.isSelected ? '✔️' : ''}}
-      {{ arrangment_map[data.day] }}
-      <el-button @click="arrange(date)">查看详细</el-button>
+    <el-calendar
+      #dateCell="{date, data}"
+      :range="range"
+      v-loading="calendarLoading"
+    >
+      <span>{{ data.day.split('-')[2] }}</span>
+      <br>
+      <template v-if="arrangment_map[data.day] == undefined">
+        <div>暂无工作安排</div>
+      </template>
+      <div v-else>
+        <div v-for="a in arrangment_map[data.day]" :key="a.ID">
+          <small>工作时间：{{a.beginTime}} - {{a.endTime}}</small>
+          <br>
+          <small>工作内容：{{a.content}}</small>
+        </div>
+      </div>
     </el-calendar>
   </div>
 </template>
 
 <script>
-import {} from "@/api/restful";
+import {
+  getArrangementsByRange,
+  getArrangementsByIDandDate
+} from "@/api/restful";
+
+import { getCurrentID } from "@/utils/storage";
+
 
 function lastMonday(day) {
   day.setDate(day.getDate() - day.getDay() + 1);
@@ -23,26 +41,29 @@ function threeWeeksLater(day) {
 }
 
 export default {
-  created() {
-    this.arrangment_map = {}
+  async created() {
+    this.calendarLoading = true;
+    await this.getArrangeByRange()
+    this.calendarLoading = false;
   },
   data() {
     return {
       range: [lastMonday(new Date()), threeWeeksLater(lastMonday(new Date()))],
-      arrangment_map: null
+      arrangment_map: {},
+      calendarLoading : false
     };
   },
-  computed: {},
   methods: {
-    arrange: function (date) {
-      console.log(date)
+    getArrangeByRange: async function() {
+      this.arrangment_map = await getArrangementsByRange(
+        getCurrentID(),
+        this.range
+      );
     }
   }
 };
 </script>
 
 <style>
-/* .sas-calender {
-  height: 100px;
-} */
+
 </style>
