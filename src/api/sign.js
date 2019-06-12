@@ -1,8 +1,14 @@
 import axios from '@/utils/request'
 
 
-export default function (dataURL) {
+export function sign(dataURL) {
   return axios.post('/sign', {
     "img": dataURL
+  })
+}
+
+export function adminSign(ID, DateTime) {
+  return axios.post('/sign/' + ID, {
+    DateTime
   })
 }

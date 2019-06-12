@@ -96,6 +96,10 @@ export function modifyTemporaryOvertime(info) {
   return axios.put('/tempovertimes/' + info.ID, info)
 }
 
+export function deleteTemporaryOvertime(ID) {
+  return axios.delete('/tempovertimes/' + ID)
+}
+
 // 请假记录
 
 export function getLeaves() {
@@ -187,5 +191,5 @@ export function getArrangementsByStaff(id, date) {
 }
 
 export function getStatus(staffID) {
-  return axios.get('/workstatus') 
+  return axios.get('/workstatus')
 }

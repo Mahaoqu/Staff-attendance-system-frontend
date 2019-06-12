@@ -214,7 +214,7 @@ export default {
       if (time == undefined) return "-";
       return (
         Math.floor(
-          (Date.now() - Date.parse(time)) / (365 * 24 * 60 * 60 * 1000)
+          (Date.now() - time) / (365 * 24 * 60 * 60 * 1000)
         ) + "岁"
       );
     },
