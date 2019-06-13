@@ -5,7 +5,7 @@
       highlight-current-row
       @current-change="handleCurrentChange"
       v-loading="listLoading"
-      style="width : 30%"
+      style="width : 50%"
     >
       <el-table-column prop="ID" label="工号" width="50"/>
       <el-table-column prop="name" label="姓名" width="180"/>
@@ -20,10 +20,25 @@
       #dateCell="{date, data}"
       v-show="this.currentStaff != null"
       v-loading="calendarLoading"
+      v-model="cvalue"
     >
       <span>{{ data.day.split('-')[2] }}</span>
       <br>
-      {{status_map[data.day]}}
+      <!-- {{status_map[data.day]}} -->
+      <div v-for="s of status_map[data.day]" :key="s.index">
+        <p v-if="s.type === 'leave'">请假：</p>
+        <p v-else>
+          {{type[s.type]}}
+          <br>
+          开始时间： {{s.beginTime}}
+          <br>
+          结束时间：{{s.endTime}}
+          <br>
+          上班打卡：{{s.pbegin || '未打卡'}}
+          <br>
+          下班打卡：{{s.pend || '未打卡' }}
+        </p>
+      </div>
       <template v-if="true"></template>
       <div v-else></div>
     </el-calendar>
@@ -34,6 +49,7 @@
 import {
   getStaff,
   getStaffsByDepartment,
+  getStatusByDate,
   getStatusByRange
 } from "@/api/restful";
 
@@ -50,8 +66,9 @@ export default {
     return {
       formLabelWidth: "100px",
       departmentMapping: {},
+      type: { arrangement: "工作安排", overtime: "加班", leaves: "请假" },
       staffs: [],
-      me: null,
+      cvalue: new Date(),
       currentStaff: null,
       currentDate: null,
       currentArranges: null,
@@ -64,24 +81,32 @@ export default {
   },
   computed: {},
   methods: {
+    // arrange: async function(date) {
+    //   console.log(date);
+    //   status = await getStatusByDate(getCurrentID(), date);
+    //   return status;
+    // },
     refreash: async function(params) {
       this.listLoading = true;
       this.me = await getStaff(getCurrentID());
       this.staffs = await getStaffsByDepartment(this.me.departmentID);
       this.listLoading = false;
     },
+
     // 更改当前的安排表
     // 选择人物时调用
     handleCurrentChange: async function(val) {
       this.currentStaff = val;
-      await this.getStatusByRange();
+      this.$nextTick(async function() {
+        await this.getStatusByRange();
+      });
     },
-    getArrangeByRange: async function() {
-      console.log(nextThreeWeek);
-      this.status_map = await getStatusByRange(
-        this.currentStaff.ID,
-        nextThreeWeek
-      );
+    getStatusByRange: async function() {
+      const a = new Date(this.cvalue.toJSON());
+      const b = new Date(this.cvalue.toJSON());
+      a.setDate(1);
+      b.setDate(30);
+      this.status_map = await getStatusByRange(this.currentStaff.ID, [a, b]);
     }
   }
 };

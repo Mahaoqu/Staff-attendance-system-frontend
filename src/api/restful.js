@@ -204,12 +204,21 @@ export function getStatus() {
   return axios.get('/workstatus/')
 }
 
+export function getStatusByDate(id, date) {
+  return axios.get('/workstatus/', {
+    params: {
+      staffID: id,
+      Date: date.toISOString().slice(0, 10)
+    }
+  })
+}
+
 export function getStatusByRange(id, range) {
   return axios.get('/workstatus/', {
     params: {
       staffID: id,
-      fromDate: range[0].toISOString().slice(0, 10),
-      toDate: range[1].toISOString().slice(0, 10)
+      from: range[0].toISOString().slice(0, 10),
+      to: range[1].toISOString().slice(0, 10)
     }
   })
 }
