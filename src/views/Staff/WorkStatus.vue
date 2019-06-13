@@ -1,10 +1,5 @@
 <template>
-  <el-table :data="status" style="width: 100%" v-loading="listLoading">
-    <el-table-column label="日期"/>
-    <el-table-column label="工作安排"></el-table-column>
-    <el-table-column label="上班时间"></el-table-column>
-    <el-table-column label="下班时间"></el-table-column>
-  </el-table>
+  
 </template>
 
 <script>

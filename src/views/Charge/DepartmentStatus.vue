@@ -34,9 +34,9 @@
           <br>
           结束时间：{{s.endTime}}
           <br>
-          上班打卡：{{s.pbegin || '未打卡'}}
+          上班打卡：{{new Date(parseInt(s.pbeginDateTime ) * 1000) || '未打卡'}}
           <br>
-          下班打卡：{{s.pend || '未打卡' }}
+          下班打卡：{{new Date(parseInt(s.pendDateTime) * 1000) || '未打卡' }}
         </p>
       </div>
       <template v-if="true"></template>
