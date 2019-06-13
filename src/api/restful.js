@@ -200,6 +200,16 @@ export function getArrangementsByRange(id, range) {
   })
 }
 
-export function getStatus(staffID) {
-  return axios.get('/workstatus')
+export function getStatus() {
+  return axios.get('/workstatus/')
+}
+
+export function getStatusByRange(id, range) {
+  return axios.get('/workstatus/', {
+    params: {
+      staffID: id,
+      fromDate: range[0].toISOString().slice(0, 10),
+      toDate: range[1].toISOString().slice(0, 10)
+    }
+  })
 }

@@ -9,6 +9,7 @@
     <dir v-if="type == '员工签到'">
       <video ref="v" @loadedmetadata="onPlay()"></video>
       <br>
+      <el-button @click="initVideo">开启摄像头</el-button>
       <el-button @click="beginSign">签到</el-button>
       <el-dialog v-loading="loading" title="正在签到中" :visible.sync="signDialogVisible"></el-dialog>
       <canvas ref="cvs" height="500px" width="500px" style="display: none"></canvas>

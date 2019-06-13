@@ -68,7 +68,7 @@
           align="right"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="假期时长" :label-width="formLabelWidth">{{ duration }}</el-form-item>
+      <el-form-item label="加班时长" :label-width="formLabelWidth">{{ duration }}</el-form-item>
 
       <el-form-item label="加班内容" :label-width="formLabelWidth">
         <el-input type="textarea" :rows="2" placeholder="加班内容（100字以内）" v-model="newitem.content"></el-input>

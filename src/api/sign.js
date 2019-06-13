@@ -2,7 +2,7 @@ import axios from '@/utils/request'
 
 
 export function sign(dataURL) {
-  return axios.post('/sign', {
+  return axios.post('/sign/', {
     "img": dataURL
   })
 }

@@ -17,7 +17,7 @@
     </el-table>
     <br>
     <el-button round type="danger">设置为996</el-button>
-    <el-button round type="primary">设置为669</el-button>
+    <el-button round type="primary">设置为955</el-button>
     <br>
     <el-calendar
       #dateCell="{date, data}"
@@ -155,7 +155,6 @@ export default {
     handleCurrentChange: async function(val) {
       this.currentStaff = val;
       await this.getArrangeByRange();
-      console.log(val);
     },
 
     // 根据当前任务刷新安排表
